@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MCU — Marvel Cinematic Universe Information System</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════
+       LOADING SCREEN
+       ════════════════════════════════════════════ -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-logo">MARVEL</div>
+    <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       SIDEBAR NAVIGATION
+       ════════════════════════════════════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <h1>MARVEL</h1>
+      <span>Cinematic Universe</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-page="home">
+        <span class="nav-icon">🏠</span> Dashboard
+      </a>
+      <a class="nav-item" data-page="characters">
+        <span class="nav-icon">🦸</span> Characters
+        <span class="nav-badge" id="charCount">0</span>
+      </a>
+      <a class="nav-item" data-page="movies">
+        <span class="nav-icon">🎬</span> Movies
+        <span class="nav-badge" id="movieCount">0</span>
+      </a>
+      <a class="nav-item" data-page="actors">
+        <span class="nav-icon">🎭</span> Actors
+        <span class="nav-badge" id="actorCount">0</span>
+      </a>
+      <a class="nav-item" data-page="teams">
+        <span class="nav-icon">👥</span> Teams
+        <span class="nav-badge" id="teamCount">0</span>
+      </a>
+      <a class="nav-item" data-page="timeline">
+        <span class="nav-icon">⏳</span> Timeline
+      </a>
+      <a class="nav-item" data-page="statistics">
+        <span class="nav-icon">📊</span> Statistics
+      </a>
+      <a class="nav-item" data-page="comparison">
+        <span class="nav-icon">⚔️</span> Compare
+      </a>
+      <a class="nav-item" data-page="quiz">
+        <span class="nav-icon">🧠</span> Quiz
+      </a>
+      <a class="nav-item" data-page="admin">
+        <span class="nav-icon">⚙️</span> Admin Panel
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ════════════════════════════════════════════
+       MAIN CONTENT
+       ════════════════════════════════════════════ -->
+  <div class="main-content">
+
+    <!-- ── Top Bar ── -->
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="globalSearch" placeholder="Search characters, movies, actors..." autocomplete="off" />
+        <div class="search-results-dropdown" id="searchDropdown"></div>
+      </div>
+      <div class="topbar-right">
+        <span class="phase-badge">MCU PHASE 1–5</span>
+        <div id="userArea">
+          <button class="login-btn" id="loginBtn">👤 Login</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: HOME / DASHBOARD
+         ═══════════════════════════════════════════ -->
+    <section class="page active" id="page-home">
+      <div class="hero-banner">
+        <h1>MARVEL CINEMATIC UNIVERSE</h1>
+        <p>Explore the complete MCU database — heroes, villains, movies, teams, timelines and statistics. 
+           Everything you need to know about the greatest cinematic saga ever told.</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🎬</div>
+          <div class="stat-number" id="totalMovies">0</div>
+          <div class="stat-label">Total Movies</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🦸</div>
+          <div class="stat-number" id="totalCharacters">0</div>
+          <div class="stat-label">Characters</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🦹</div>
+          <div class="stat-number" id="totalVillains">0</div>
+          <div class="stat-label">Villains</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-number" id="totalTeams">0</div>
+          <div class="stat-label">Teams</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎭</div>
+          <div class="stat-number" id="totalActors">0</div>
+          <div class="stat-label">Actors</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-number" id="totalBoxOffice">$0B</div>
+          <div class="stat-label">Total Box Office</div>
+        </div>
+      </div>
+
+      <!-- Phase Overview -->
+      <div class="page-header">
+        <h2>MCU PHASES</h2>
+        <p>The Infinity Saga and The Multiverse Saga</p>
+      </div>
+      <div class="phase-cards" id="phaseCards"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: CHARACTERS
+         ═══════════════════════════════════════════ -->
+    <section class="page page-cinematic-bg" id="page-characters">
+      <div class="page-header">
+        <h2>CHARACTERS</h2>
+        <p>Heroes, Villains & Supporting Characters of the MCU</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar" id="charFilterBar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="hero">🦸 Heroes</button>
+        <button class="filter-btn" data-filter="villain">🦹 Villains</button>
+        <button class="filter-btn" data-filter="supporting">👤 Supporting</button>
+        <button class="filter-btn" data-filter="alive">✅ Alive</button>
+        <button class="filter-btn" data-filter="dead">💀 Dead</button>
+      </div>
+
+      <!-- Characters Grid -->
+      <div class="characters-grid" id="charactersGrid"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: MOVIES
+         ═══════════════════════════════════════════ -->
+    <section class="page page-cinematic-bg" id="page-movies">
+      <div class="page-header">
+        <h2>MOVIES</h2>
+        <p>Complete MCU Filmography — Phase 1 through Phase 5</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar" id="movieFilterBar">
+        <button class="filter-btn active" data-filter="all">All Phases</button>
+        <button class="filter-btn" data-filter="1">Phase 1</button>
+        <button class="filter-btn" data-filter="2">Phase 2</button>
+        <button class="filter-btn" data-filter="3">Phase 3</button>
+        <button class="filter-btn" data-filter="4">Phase 4</button>
+        <button class="filter-btn" data-filter="5">Phase 5</button>
+      </div>
+
+      <div class="movies-grid" id="moviesGrid"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: ACTORS
+         ═══════════════════════════════════════════ -->
+    <section class="page" id="page-actors">
+      <div class="page-header">
+        <h2>ACTORS</h2>
+        <p>The talented cast behind the iconic MCU characters</p>
+      </div>
+      <div class="actors-grid" id="actorsGrid"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: TEAMS
+         ═══════════════════════════════════════════ -->
+    <section class="page" id="page-teams">
+      <div class="page-header">
+        <h2>TEAMS & ORGANIZATIONS</h2>
+        <p>Alliances and factions across the Marvel Universe</p>
+      </div>
+      <div class="teams-grid" id="teamsGrid"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: TIMELINE
+         ═══════════════════════════════════════════ -->
+    <section class="page page-cinematic-bg" id="page-timeline">
+      <div class="page-header">
+        <h2>MCU TIMELINE</h2>
+        <p>Chronological & release-order viewing guide</p>
+      </div>
+
+      <div class="timeline-tabs" id="timelineTabs">
+        <button class="timeline-tab active" data-order="release">Release Order</button>
+        <button class="timeline-tab" data-order="phase">Phase-wise</button>
+      </div>
+
+      <div class="timeline-container" id="timelineContainer"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: STATISTICS
+         ═══════════════════════════════════════════ -->
+    <section class="page page-cinematic-bg" id="page-statistics">
+      <div class="page-header">
+        <h2>STATISTICS & RANKINGS</h2>
+        <p>Power rankings, box office records, and MCU analytics</p>
+      </div>
+
+      <!-- Analytics Pie Charts -->
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <h3>🦸 HEROES VS VILLAINS</h3>
+          <div class="pie-chart-container"><canvas id="pieHeroVillain" width="220" height="220"></canvas></div>
+          <div class="pie-legend" id="legendHeroVillain"></div>
+        </div>
+        <div class="analytics-card">
+          <h3>💀 ALIVE VS DEAD</h3>
+          <div class="pie-chart-container"><canvas id="pieAliveStatus" width="220" height="220"></canvas></div>
+          <div class="pie-legend" id="legendAliveStatus"></div>
+        </div>
+        <div class="analytics-card">
+          <h3>🎬 MOVIES BY PHASE</h3>
+          <div class="pie-chart-container"><canvas id="piePhaseMovies" width="220" height="220"></canvas></div>
+          <div class="pie-legend" id="legendPhaseMovies"></div>
+        </div>
+      </div>
+
+      <div class="stats-section-grid">
+        <!-- Power Rankings -->
+        <div class="stats-panel">
+          <h3>⚡ STRONGEST CHARACTERS</h3>
+          <ul class="ranking-list" id="strengthRanking"></ul>
+        </div>
+
+        <!-- Intelligence Rankings -->
+        <div class="stats-panel">
+          <h3>🧠 MOST INTELLIGENT</h3>
+          <ul class="ranking-list" id="intelligenceRanking"></ul>
+        </div>
+
+        <!-- Highest Grossing Movies -->
+        <div class="stats-panel">
+          <h3>💰 HIGHEST GROSSING MOVIES</h3>
+          <ul class="ranking-list" id="boxOfficeRanking"></ul>
+        </div>
+
+        <!-- Top Rated Movies -->
+        <div class="stats-panel">
+          <h3>⭐ TOP RATED MOVIES (IMDb)</h3>
+          <ul class="ranking-list" id="ratingRanking"></ul>
+        </div>
+
+        <!-- Most Appearing Characters -->
+        <div class="stats-panel">
+          <h3>🎬 MOST MOVIE APPEARANCES</h3>
+          <ul class="ranking-list" id="appearanceRanking"></ul>
+        </div>
+
+        <!-- Energy Power Rankings -->
+        <div class="stats-panel">
+          <h3>🔥 HIGHEST ENERGY POWER</h3>
+          <ul class="ranking-list" id="energyRanking"></ul>
+        </div>
+      </div>
+
+      <!-- Relationship List -->
+      <div class="relationship-graph">
+        <h3>🔗 RELATIONSHIP NETWORK</h3>
+        <div class="rel-list" id="relList"></div>
+      </div>
+
+      <!-- Network Graph Visualization -->
+      <div class="network-graph-container">
+        <h3>🕸️ VISUAL RELATIONSHIP GRAPH</h3>
+        <div class="network-canvas-wrapper">
+          <canvas id="networkGraph" width="900" height="500"></canvas>
+        </div>
+        <div class="network-legend">
+          <div class="network-legend-item"><div class="network-legend-line" style="background:#66bb6a"></div> Friend / Ally</div>
+          <div class="network-legend-item"><div class="network-legend-line" style="background:#ef5350"></div> Enemy</div>
+          <div class="network-legend-item"><div class="network-legend-line" style="background:#42a5f5"></div> Mentor</div>
+          <div class="network-legend-item"><div class="network-legend-line" style="background:#ec407a"></div> Love Interest</div>
+          <div class="network-legend-item"><div class="network-legend-line" style="background:#ffca28"></div> Family</div>
+          <div class="network-legend-item"><div class="network-legend-line" style="background:#ab47bc"></div> Leader / Founder</div>
+        </div>
+      </div>
+
+      <!-- Horizontal Scroll Timeline -->
+      <div style="margin-top:30px">
+        <h3 style="font-family:'Bebas Neue',cursive;font-size:1.4rem;letter-spacing:1px;color:var(--red);margin-bottom:5px">📜 HORIZONTAL TIMELINE</h3>
+        <div class="h-timeline-wrapper">
+          <div class="h-timeline" id="hTimeline"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: CHARACTER COMPARISON
+         ═══════════════════════════════════════════ -->
+    <section class="page page-cinematic-bg" id="page-comparison">
+      <div class="page-header">
+        <h2>CHARACTER COMPARISON</h2>
+        <p>Compare any two MCU characters side by side — stats, powers & radar chart</p>
+      </div>
+      <div class="comparison-container">
+        <div class="comparison-selectors">
+          <div class="comp-select-box">
+            <label>FIGHTER 1</label>
+            <select id="compChar1"></select>
+          </div>
+          <div class="comp-vs">⚔️ VS</div>
+          <div class="comp-select-box">
+            <label>FIGHTER 2</label>
+            <select id="compChar2"></select>
+          </div>
+        </div>
+        <div id="compResult"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: QUIZ
+         ═══════════════════════════════════════════ -->
+    <section class="page" id="page-quiz">
+      <div class="page-header">
+        <h2>MCU QUIZ</h2>
+        <p>Test your Marvel Cinematic Universe knowledge</p>
+      </div>
+      <div class="quiz-container">
+        <div id="quizStart" class="quiz-start">
+          <div class="quiz-icon">🧠</div>
+          <h3>ARE YOU A TRUE MCU FAN?</h3>
+          <p>Answer 10 random questions from the MCU universe.<br>Find out if you're a Legend, Hero, Sidekick, or Civilian!</p>
+          <button class="quiz-start-btn" id="startQuizBtn">START QUIZ</button>
+        </div>
+        <div id="quizActive" style="display:none">
+          <div class="quiz-progress">
+            <span class="quiz-progress-text" id="quizProgressText">1 / 10</span>
+            <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+            <span class="quiz-timer" id="quizTimer">⏱ 15s</span>
+          </div>
+          <div id="quizQuestionArea"></div>
+          <div class="quiz-options" id="quizOptions"></div>
+        </div>
+        <div id="quizResultArea" style="display:none"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: ADMIN PANEL
+         ═══════════════════════════════════════════ -->
+    <section class="page" id="page-admin">
+      <div class="page-header">
+        <h2>ADMIN PANEL</h2>
+        <p>Manage the MCU database — Add, Edit, Delete characters & movies</p>
+      </div>
+      <div class="admin-container">
+        <div class="admin-tabs" id="adminTabs">
+          <button class="admin-tab active" data-tab="add-char">➕ Add Character</button>
+          <button class="admin-tab" data-tab="add-movie">🎬 Add Movie</button>
+          <button class="admin-tab" data-tab="manage">📋 Manage Data</button>
+        </div>
+        <div id="adminContent"></div>
+      </div>
+    </section>
+
+  </div><!-- /main-content -->
+
+  <!-- ════════════════════════════════════════════
+       LOGIN MODAL
+       ════════════════════════════════════════════ -->
+  <div class="login-modal-overlay" id="loginModalOverlay">
+    <div class="login-modal">
+      <button class="modal-close" id="loginModalClose">✕</button>
+      <h2>MCU SYSTEM</h2>
+      <p class="login-subtitle">Login or Register to save favorites & rate movies</p>
+      <div class="login-tabs">
+        <button class="login-tab active" data-ltab="login">Login</button>
+        <button class="login-tab" data-ltab="register">Register</button>
+      </div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label>USERNAME</label>
+          <input type="text" id="loginUsername" placeholder="Enter username" required />
+        </div>
+        <div class="form-group">
+          <label>PASSWORD</label>
+          <input type="password" id="loginPassword" placeholder="Enter password" required />
+        </div>
+        <button type="submit" class="login-form-submit" id="loginSubmitBtn">LOGIN</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       CHARACTER DETAIL MODAL
+       ════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="charModal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-hero" id="modalHero"></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
